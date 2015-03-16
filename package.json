@@ -3,6 +3,7 @@
   "name": "forever-agent",
   "description": "HTTP Agent that keeps socket connections alive between keep-alive requests. Formerly part of mikeal/request, now a standalone module.",
   "version": "0.5.3",
+  "license": "Apache-2.0",
   "repository": {
     "url": "https://github.com/mikeal/forever-agent"
   },
@@ -12,6 +13,5 @@
   "optionalDependencies": {},
   "engines": {
     "node": "*"
-  },
-  "license": "Apache 2.0"
+  }
 }
