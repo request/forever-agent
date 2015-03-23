@@ -16,7 +16,11 @@ function ForeverAgent(options) {
   self.maxSockets = self.options.maxSockets || Agent.defaultMaxSockets
   self.minSockets = self.options.minSockets || ForeverAgent.defaultMinSockets
   self.on('free', function(socket, host, port) {
-    var name = host + ':' + port
+    // For node.js v0.12.0 and iojs-v1.5.1, host is a structure instead of a string
+    // Also, any existing localAddress is part of the connection name
+    var name = typeof host === 'string' ? host + ':' + port :
+                                          host.uri.hostname + ':' + host.uri.port + (host.localAddress ? (':' + host.localAddress + ':') : '::')
+
     if (self.requests[name] && self.requests[name].length) {
       self.requests[name].shift().onSocket(socket)
     } else if (self.sockets[name].length < self.minSockets) {
@@ -53,7 +57,11 @@ ForeverAgent.prototype.addRequest = function(req, host, port) {
     host = options.host
   }
 
-  var name = host + ':' + port
+  // For node.js v0.12.0 and iojs-v1.5.1, host is a structure instead of a string
+  // Also, any existing localAddress is part of the connection name
+  var name = typeof host === 'string' ? host + ':' + port :
+                                        host.uri.hostname + ':' + host.uri.port + (host.localAddress ? (':' + host.localAddress + ':') : '::')
+
   if (this.freeSockets[name] && this.freeSockets[name].length > 0 && !req.useChunkedEncodingByDefault) {
     var idleSocket = this.freeSockets[name].pop()
     idleSocket.removeListener('error', idleSocket._onIdleError)
