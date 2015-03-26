@@ -19,7 +19,7 @@ function ForeverAgent(options) {
     // For node.js v0.12.0 and iojs-v1.5.1, host is a structure instead of a string
     // Also, any existing localAddress is part of the connection name
     var name = typeof host === 'string' ? host + ':' + port :
-                                          host.uri.hostname + ':' + host.uri.port + (host.localAddress ? (':' + host.localAddress + ':') : '::')
+                                          host.host + ':' + host.port + (host.localAddress ? (':' + host.localAddress + ':') : '::')
 
     if (self.requests[name] && self.requests[name].length) {
       self.requests[name].shift().onSocket(socket)
@@ -60,7 +60,7 @@ ForeverAgent.prototype.addRequest = function(req, host, port) {
   // For node.js v0.12.0 and iojs-v1.5.1, host is a structure instead of a string
   // Also, any existing localAddress is part of the connection name
   var name = typeof host === 'string' ? host + ':' + port :
-                                        host.uri.hostname + ':' + host.uri.port + (host.localAddress ? (':' + host.localAddress + ':') : '::')
+                                        host.host + ':' + host.port + (host.localAddress ? (':' + host.localAddress + ':') : '::')
 
   if (this.freeSockets[name] && this.freeSockets[name].length > 0 && !req.useChunkedEncodingByDefault) {
     var idleSocket = this.freeSockets[name].pop()
