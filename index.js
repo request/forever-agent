@@ -60,6 +60,12 @@ ForeverAgent.prototype.createConnection = net.createConnection
 ForeverAgent.prototype.addRequestNoreuse = Agent.prototype.addRequest
 ForeverAgent.prototype.addRequest = function(req, host, port) {
   var name = getConnectionName(host, port)
+  
+  if (typeof host !== 'string') {
+    var options = host
+    port = options.port
+    host = options.host
+  }
 
   if (this.freeSockets[name] && this.freeSockets[name].length > 0 && !req.useChunkedEncodingByDefault) {
     var idleSocket = this.freeSockets[name].pop()
